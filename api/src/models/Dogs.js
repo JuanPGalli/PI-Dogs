@@ -9,18 +9,26 @@ module.exports = (sequelize) => {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
-        defaulValue: UUIDV4,
+        defaultValue: UUIDV4,
       },
       image: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isUrl: true,
+          isUrl: {
+            msg: "It must be a valid URL",
+          },
         },
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          len: {
+            args: [2, 20],
+            msg: "The name must contain in between 2 and 20 characters",
+          },
+        },
       },
       height: {
         type: DataTypes.STRING,
