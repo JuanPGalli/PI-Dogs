@@ -47,8 +47,19 @@ const getDogById = async function (id) {
   return dogId;
 };
 
-const createDogDb = async (image, name, height, weight, life_span) => {
-  return await Dogs.create({ image, name, height, weight, life_span });
+const createDogDb = async (
+  image,
+  name,
+  height,
+  weight,
+  life_span,
+  temperamentId
+) => {
+  const newDog = await Dogs.create({ image, name, height, weight, life_span });
+
+  await newDog.setTemperaments(temperamentId);
+
+  return newDog;
 };
 
 module.exports = {
