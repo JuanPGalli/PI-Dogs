@@ -1,10 +1,16 @@
 const axios = require("axios");
-const { Dogs } = require("../db");
+const { Dogs, Temperaments } = require("../db");
 const { Op } = require("sequelize");
 const { cleanArray, cleanArrayTemp } = require("../helpers/helpers");
 
 const getAllDogs = async function () {
-  const dataBaseDog = await Dogs.findAll();
+  const dataBaseDog = await Dogs.findAll({
+    include: {
+      model: Temperaments,
+      attributes: ["name"],
+      through: { attributes: [] }, //Esto excluye el through model, que traía por default la tabla "Dogs_Temperaments".
+    }, //Devuelve un array de objetos, si se quiere mostrar solo como un ebjeto, hay que hacer un map.
+  });
 
   const rawArray = (await axios.get("https://api.thedogapi.com/v1/breeds"))
     .data;
