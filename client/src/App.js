@@ -1,10 +1,22 @@
-import './App.css';
+import "./App.css";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
+import Home from "./Views/Home/Home";
+import Landing from "./Views/Landing/Landing";
+import Navbar from "./Components/Navbar/Navbar";
+import Form from "./Views/Form/Form";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Henry Dogs</h1>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Route path={"/"} component={Navbar} />
+        <Switch>
+          <Route exact path={"/"} component={Landing} />
+          <Route path={"/home"} component={Home} />
+          <Route path={"/create"} component={Form} />
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 

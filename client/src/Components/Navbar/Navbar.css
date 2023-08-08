@@ -1,0 +1,17 @@
+.nav-container {
+  background-color: rgb(251, 255, 0);
+  display: flex;
+}
+
+.img-container img {
+  width: 4rem;
+  margin: 10px;
+}
+
+.link-container {
+  display: flex;
+  width: 10rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 40.5vw;
+}
