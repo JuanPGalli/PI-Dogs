@@ -6,6 +6,8 @@ import Navbar from "./Components/Navbar/Navbar";
 import Form from "./Views/Form/Form";
 
 function App() {
+  /* const location = useLocation(); */
+
   return (
     <BrowserRouter>
       <div className="App">

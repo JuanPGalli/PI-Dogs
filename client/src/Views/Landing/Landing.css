@@ -1,0 +1,9 @@
+.landing-page {
+  height: 85vh;
+}
+
+.landing-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajusta la imagen para llenar todo el contenedor */
+}

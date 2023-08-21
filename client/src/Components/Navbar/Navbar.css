@@ -1,5 +1,10 @@
 .nav-container {
-  background-color: rgb(251, 255, 0);
+  /* background: linear-gradient(
+    to right,
+    rgb(21, 159, 141) 0%,
+    rgb(56, 58, 159) 100%
+  ); */
+  background-color: #80ddff;
   display: flex;
 }
 
@@ -10,8 +15,15 @@
 
 .link-container {
   display: flex;
-  width: 10rem;
+  width: 13rem;
   justify-content: space-between;
   align-items: center;
-  margin-left: 36vw;
+  margin-left: 30vw;
+}
+
+.link-container a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: 120%;
 }

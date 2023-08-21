@@ -1,21 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import dogLogo from "./LogoDogs.jpg";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const location = useLocation();
   return (
     <div className="nav-container">
       <div className="img-container">
         <Link to={"/"}>
-          <img
-            src="https://cdn.theorg.com/d3119e0e-8202-4034-85ce-d0356382515e_thumb.jpg"
-            alt="henryLogo"
-          />
+          <img src={dogLogo} alt="dogLogo" />
         </Link>
       </div>
       <div className="link-container">
-        <Link to={"/home"}>Home</Link>
-        <Link to={"/create"}>Create Dog</Link>
+        <Link to={"/home"}>HOME</Link>
+        {location.pathname !== "/" && <Link to={"/create"}>CREATE DOG</Link>}
       </div>
     </div>
   );
