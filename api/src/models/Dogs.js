@@ -14,15 +14,16 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
+        /* validate: {
           isUrl: {
             msg: "It must be a valid URL",
           },
-        },
+        }, */
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           len: {
             args: [2, 20],
@@ -41,6 +42,10 @@ module.exports = (sequelize) => {
       life_span: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      created: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
     },
     { timestamps: false }

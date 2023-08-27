@@ -1,12 +1,12 @@
 const axios = require("axios");
 const { Temperaments } = require("../db");
+const { API_URL, API_KEY } = process.env;
 
 const getDogsTemp = async function () {
   const dogTemps = await Temperaments.findAll();
 
   if (!dogTemps.length) {
-    const rawArray = (await axios.get("https://api.thedogapi.com/v1/breeds"))
-      .data;
+    const rawArray = (await axios.get(`${API_URL}?api_key=${API_KEY}`)).data;
     const rawTemps = rawArray.map((elem) => elem.temperament);
 
     const res = rawTemps.join(", ").split(", ");

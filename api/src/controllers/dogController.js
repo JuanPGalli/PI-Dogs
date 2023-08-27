@@ -2,6 +2,7 @@ const axios = require("axios");
 const { Dogs, Temperaments } = require("../db");
 const { Op } = require("sequelize");
 const { cleanArray, cleanArrayTemp } = require("../helpers/helpers");
+const { API_URL, API_KEY } = process.env;
 
 const getAllDogs = async function () {
   const dataBaseDog = await Dogs.findAll({
@@ -12,8 +13,8 @@ const getAllDogs = async function () {
     }, //Devuelve un array de objetos, si se quiere mostrar solo como un ebjeto, hay que hacer un map.
   });
 
-  const rawArray = (await axios.get("https://api.thedogapi.com/v1/breeds"))
-    .data;
+  const rawArray = (await axios.get(`${API_URL}?api_key=${API_KEY}`)).data;
+
   const dogsApi = cleanArray(rawArray);
 
   return [...dataBaseDog, ...dogsApi];
@@ -29,8 +30,7 @@ const getDogByName = async function (name) {
         },
       },
     });
-    const rawArray = (await axios.get("https://api.thedogapi.com/v1/breeds"))
-      .data;
+    const rawArray = (await axios.get(`${API_URL}?api_key=${API_KEY}`)).data;
     const dogsApi = cleanArray(rawArray);
     const filteredApi = dogsApi.filter((dog) => {
       return dog.name.toLowerCase().includes(name.toLowerCase()); // Busqueda inexacta
@@ -46,8 +46,7 @@ const getDogById = async function (id) {
     const dog = await Dogs.findByPk(id);
     return dog;
   }
-  const rawArray = (await axios.get("https://api.thedogapi.com/v1/breeds"))
-    .data;
+  const rawArray = (await axios.get(`${API_URL}?api_key=${API_KEY}`)).data;
   const dogsId = cleanArrayTemp(rawArray);
   const dogId = dogsId.filter((dog) => dog.id === Number(id));
   return dogId;

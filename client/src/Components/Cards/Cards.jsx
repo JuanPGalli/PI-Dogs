@@ -1,12 +1,27 @@
 import React from "react";
 import Card from "../Card/Card";
 import "./Cards.css";
-import img from "../../../src/Views/Landing/dogs.jpg";
+import { stringAllTemps } from "../../Helper/Helper";
+/* import img from "../../../src/Views/Landing/dogs.jpg"; */
 
-const Cards = () => {
+const Cards = ({ allDogs }) => {
   return (
     <div className="cards-container">
-      <Card
+      {allDogs.map((dog) => (
+        <Card
+          key={dog.id}
+          image={dog.image}
+          name={dog.name}
+          temperaments={
+            dog.created === true
+              ? stringAllTemps(dog.Temperaments)
+              : dog.temperaments
+          }
+          weight={dog.weight}
+        />
+      ))}
+
+      {/* <Card
         image={img}
         name={"Lucas"}
         temperaments={"45679965"}
@@ -53,7 +68,7 @@ const Cards = () => {
         name={"Matias"}
         temperaments={"45679965"}
         weight={"Matias@gmail.com"}
-      />
+      /> */}
     </div>
   );
 };

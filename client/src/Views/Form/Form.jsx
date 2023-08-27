@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-//import { useDispatch } from "react-redux";
-//import { postUser } from "../../Redux/Actions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  postNewDog,
+  getAllTemperaments,
+  getAllDogs,
+} from "../../Redux/Actions";
 import "./Form.css";
 
 const Form = () => {
@@ -10,7 +14,7 @@ const Form = () => {
     maxHeight: "",
     minWeight: "",
     maxWeight: "",
-    lifeSpan: "",
+    life_span: "",
     temperaments: [],
   });
 
@@ -20,14 +24,13 @@ const Form = () => {
     maxHeight: "Max Height is required",
     minWeight: "Min Weight is required",
     maxWeight: "Max Weight is required",
-    lifeSpan: "Life Span is required",
+    life_span: "Life Span is required",
     temperaments: "",
   });
 
-  const [submitted, setSubmitted] = useState(false); // Nuevo estado para controlar si se ha enviado el formulario
-  const [showAlert, setShowAlert] = useState(false); // Nuevo estado para controlar si mostrar el alerta
+  const allTemps = useSelector((state) => state.allTemps); // Estado Global con todos los temperamentos
 
-  //const disptach = useDispatch();
+  const dispatch = useDispatch();
 
   const disable = () => {
     let disabled = true;
@@ -36,7 +39,6 @@ const Form = () => {
       if (errors[error] === "") disabled = false;
       else {
         disabled = true;
-        //alert("UPS! HUBO UN ERROR"); //Se puede jugar con un alert, acá está mal hecho porque salta todo el tiempo.
         break;
       }
     }
@@ -50,13 +52,14 @@ const Form = () => {
       if (input.name.trim() !== "") {
         if (
           regexName.test(input.name.trim()) &&
-          input.name.trim().length < 11
+          input.name.trim().length > 1 &&
+          input.name.trim().length < 21
         ) {
           setErrors({ ...errors, name: "" });
         } else
           setErrors({
             ...errors,
-            name: "Invalid name or more than 10 characters long!",
+            name: "Invalid name or less than 2 characters or more than 20 characters long!",
           });
       } else setErrors({ ...errors, name: "Name is required" });
     } else if (name === "minHeight") {
@@ -109,25 +112,27 @@ const Form = () => {
               "Invalid Max Weight. Check if Max Weight is a number bigger than Min Weight.",
           });
       } else setErrors({ ...errors, maxWeight: "Max Weight is required" });
-    } else if (name === "lifeSpan") {
-      if (input.lifeSpan.trim() !== "") {
-        if (regexNumber.test(input.lifeSpan.trim())) {
-          if (parseInt(input.lifeSpan.trim()) < 20) {
-            setErrors({ ...errors, lifeSpan: "" });
+    } else if (name === "life_span") {
+      if (input.life_span.trim() !== "") {
+        if (regexNumber.test(input.life_span.trim())) {
+          if (parseInt(input.life_span.trim()) < 20) {
+            setErrors({ ...errors, life_span: "" });
           } else
             setErrors({
               ...errors,
-              lifeSpan: "Are you shure the dog can be that old?",
+              life_span: "Are you shure the dog can be that old?",
             });
-        } else setErrors({ ...errors, lifeSpan: "Invalid Life Span" });
-      } else setErrors({ ...errors, lifeSpan: "Life Span is required" });
+        } else setErrors({ ...errors, life_span: "Invalid Life Span" });
+      } else setErrors({ ...errors, life_span: "Life Span is required" });
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(input);
-    //dispatch(postUser(input));
+    dispatch(postNewDog(input)).then(() => {
+      dispatch(getAllDogs());
+    });
 
     event.target.reset();
 
@@ -137,7 +142,7 @@ const Form = () => {
       maxHeight: "",
       minWeight: "",
       maxWeight: "",
-      lifeSpan: "",
+      life_span: "",
       temperaments: [],
     });
     setErrors({
@@ -146,11 +151,9 @@ const Form = () => {
       maxHeight: "Max Height is required",
       minWeight: "Min Weight is required",
       maxWeight: "Max Weight is required",
-      lifeSpan: "Life Span is required",
+      life_span: "Life Span is required",
       temperaments: "",
     });
-    setSubmitted(true);
-    setShowAlert(true); // Mostrar el alerta después de enviar el formulario
   };
 
   const handleChange = (event) => {
@@ -178,12 +181,15 @@ const Form = () => {
     }
   };
 
-  // Usar useEffect para ocultar la alerta después de pegarle a submit
+  // Traigo los temperaments de la DB para colocarlos en el Form en la lista desplegable.
   useEffect(() => {
-    if (showAlert) {
-      setShowAlert(false);
+    if (!allTemps.lenght) {
+      const result = dispatch(getAllTemperaments());
+      console.log(result);
+      return result;
     }
-  }, [showAlert]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -220,16 +226,17 @@ const Form = () => {
         </div>
         <div className="divs">
           <label>Life Span:</label>
-          <input name="lifeSpan" type="text" onChange={handleChange} />
-          {errors.lifeSpan}
+          <input name="life_span" type="text" onChange={handleChange} />
+          {errors.life_span}
         </div>
         <label>Temperaments:</label>
         <select name="temperaments" onChange={handleChange} multiple>
-          <option value="none">ctrl + temp</option>
-          <option value="stubborn">Stubborn</option>
-          <option value="intelligent">intelligent</option>
-          <option value="fast">fast</option>
-          <option value="curious">curious</option>
+          <option value="none">Select Temperaments</option>
+          {allTemps.map((temperament) => (
+            <option key={temperament.id} value={temperament.id}>
+              {temperament.name}
+            </option>
+          ))}
         </select>
         <input
           disabled={disable()}
@@ -239,8 +246,6 @@ const Form = () => {
           className="submit-btn"
         />
       </form>
-      {/* Mostrar mensaje de éxito después del envío */}
-      {submitted && showAlert && alert("Dog Breed Succesfully Created !")}
     </div>
   );
 };

@@ -7,6 +7,7 @@ const cleanArray = (arr) =>
       height: elem.height.metric,
       weight: elem.weight.metric,
       life_span: elem.life_span,
+      temperaments: elem.temperament,
       created: false,
     };
   });
