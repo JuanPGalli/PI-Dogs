@@ -11,14 +11,49 @@ import {
 
 const Home = () => {
   const dispatch = useDispatch();
+  const ITEMS_PER_PAGE = 8;
   const allDogs = useSelector((state) => state.allDogs);
   const allTemps = useSelector((state) => state.allTemps);
   const dogsFiltered = useSelector((state) => state.dogsFiltered);
   const filters = useSelector((state) => state.filters);
-  const ITEMS_PER_PAGE = 8;
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [items, setItems] = useState([...allDogs].splice(0, ITEMS_PER_PAGE));
+
+  const [items, setItems] = useState([...allDogs]?.splice(0, ITEMS_PER_PAGE));
+  const [itemsFiltered, setItemsFiltered] = useState(
+    [...dogsFiltered]?.splice(0, ITEMS_PER_PAGE)
+  );
+
+  const nextPage = () => {
+    if (filters) {
+      const next_page = currentPage + 1;
+      const firstIndex = next_page * ITEMS_PER_PAGE;
+      if (firstIndex >= allDogs.length) return;
+      setItemsFiltered([...dogsFiltered]?.splice(firstIndex, ITEMS_PER_PAGE));
+      setCurrentPage(next_page);
+      return;
+    }
+    const next_page = currentPage + 1;
+    const firstIndex = next_page * ITEMS_PER_PAGE;
+    if (firstIndex >= allDogs.length) return;
+    setItems([...allDogs]?.splice(firstIndex, ITEMS_PER_PAGE));
+    setCurrentPage(next_page);
+  };
+  const prevPage = () => {
+    if (filters) {
+      const prev_page = currentPage - 1;
+      const firstIndex = prev_page * ITEMS_PER_PAGE;
+      if (prev_page < 0) return;
+      setItemsFiltered([...dogsFiltered]?.splice(firstIndex, ITEMS_PER_PAGE));
+      setCurrentPage(prev_page);
+      return;
+    }
+    const prev_page = currentPage - 1;
+    const firstIndex = prev_page * ITEMS_PER_PAGE;
+    if (prev_page < 0) return;
+    setItems([...allDogs]?.splice(firstIndex, ITEMS_PER_PAGE));
+    setCurrentPage(prev_page);
+  };
 
   useEffect(() => {
     dispatch(getAllDogs());
@@ -35,10 +70,25 @@ const Home = () => {
     dispatch(filterByTemp(event.target.value, "temperament"));
   };
 
+  useEffect(() => {
+    // <----- se ejecuta cuando el estado se actualiza
+    setItems([...allDogs]?.splice(0, ITEMS_PER_PAGE));
+  }, [allDogs]);
+
+  useEffect(() => {
+    // <----- se ejecuta cuando el estado se actualiza
+    setItemsFiltered([...dogsFiltered]?.splice(0, ITEMS_PER_PAGE));
+  }, [dogsFiltered]);
+
   return (
     <div className="home-container">
       <div>
+        <button onClick={prevPage}>Prev</button>
+        <button onClick={nextPage}>Next</button>
+      </div>
+      <div>
         <label>Temperaments Filter: </label>
+        {console.log(dogsFiltered)}
         <select onChange={filterTemp}>
           <option defaultChecked value="0">
             -
@@ -62,9 +112,9 @@ const Home = () => {
           <option value="DB">DB</option>
         </select>
         {filters ? (
-          <Cards allDogs={dogsFiltered} />
+          <Cards allDogs={itemsFiltered} />
         ) : (
-          <Cards allDogs={allDogs} />
+          <Cards allDogs={items} />
         )}
       </div>
     </div>
