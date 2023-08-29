@@ -3,6 +3,8 @@ import {
   GET_ALL_DOGS,
   FILTERS,
   FILTER_TEMP,
+  GET_DOG_BY_ID,
+  CLEAN_STATE,
 } from "../ActionTypes";
 
 let initialState = {
@@ -10,6 +12,7 @@ let initialState = {
   allDogs: [],
   dogsFiltered: [],
   filters: false,
+  dogById: {},
 };
 
 function rootReducer(state = initialState, action) {
@@ -119,6 +122,19 @@ function rootReducer(state = initialState, action) {
         };
       }
       break;
+
+    case GET_DOG_BY_ID:
+      return {
+        ...state,
+        dogById: action.payload,
+      };
+
+    case CLEAN_STATE:
+      return {
+        ...state,
+        dogById: {},
+      };
+
     default:
       return { ...state };
   }

@@ -26,4 +26,9 @@ const cleanArrayTemp = (arr) =>
     };
   });
 
-module.exports = { cleanArray, cleanArrayTemp };
+const stringAllTemps = (Temperaments) => {
+  const temperamentsNames = Temperaments.map((temp) => temp.name);
+  return temperamentsNames.join(", ");
+};
+
+module.exports = { cleanArray, cleanArrayTemp, stringAllTemps };

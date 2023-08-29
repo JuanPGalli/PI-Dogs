@@ -43,13 +43,20 @@ const getDogByName = async function (name) {
 
 const getDogById = async function (id) {
   if (isNaN(id)) {
-    const dog = await Dogs.findByPk(id);
+    const dog = await Dogs.findOne({
+      where: { id },
+      include: {
+        model: Temperaments,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+    });
     return dog;
   }
   const rawArray = (await axios.get(`${API_URL}?api_key=${API_KEY}`)).data;
   const dogsId = cleanArrayTemp(rawArray);
   const dogId = dogsId.filter((dog) => dog.id === Number(id));
-  return dogId;
+  return dogId[0];
 };
 
 const createDogDb = async (

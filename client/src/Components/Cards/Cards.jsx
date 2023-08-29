@@ -10,6 +10,7 @@ const Cards = ({ allDogs }) => {
       {allDogs.map((dog) => (
         <Card
           key={dog.id}
+          id={dog.id}
           image={dog.image}
           name={dog.name}
           temperaments={

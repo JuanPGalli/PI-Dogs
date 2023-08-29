@@ -4,6 +4,8 @@ import {
   FILTER_TEMP,
   GET_ALL_DOGS,
   GET_ALL_TEMPERAMENTS,
+  GET_DOG_BY_ID,
+  CLEAN_STATE,
 } from "../ActionTypes/index";
 import addImg from "./dogs.jpg";
 
@@ -37,6 +39,7 @@ export function getAllTemperaments() {
       });
     } catch (error) {
       console.log(error.response.data.error);
+      alert(error.response.data.error);
     }
   };
 }
@@ -73,6 +76,28 @@ export function filterByTemp(value, filterType) {
     return dispatch({
       type: FILTER_TEMP,
       payload: { value, filterType },
+    });
+  };
+}
+
+export function getDogById(id) {
+  return async function (dispatch) {
+    try {
+      const result = (await axios.get(`http://localhost:3001/dogs/${id}`)).data;
+      return dispatch({
+        type: GET_DOG_BY_ID,
+        payload: result,
+      });
+    } catch (error) {
+      alert(error.response.data.error);
+    }
+  };
+}
+
+export function cleanState() {
+  return function (dispatch) {
+    return dispatch({
+      type: CLEAN_STATE,
     });
   };
 }
