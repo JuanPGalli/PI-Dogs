@@ -113,7 +113,7 @@ function rootReducer(state = initialState, action) {
             (dog) =>
               dog.temperaments &&
               dog.temperaments.includes(action.payload.value)
-          ),
+          ), //No están entrando los Dogs creados en la DB porque tienen un formato de Temperaments diferentes, con un array y una propiedad "name". Habría que haberlos filtrado desde su creación para igualarlos a los de la API, haciando un string en vez de un array. Creo que eso me está afectando para desde la searchBar buscar a los dogs creados en la DB.
         };
       } else if (
         action.payload.filterType === "temperament" &&
