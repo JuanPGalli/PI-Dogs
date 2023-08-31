@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./Card.css";
 
 const Card = ({ id, image, name, temperaments, weight }) => {
-  console.log(id);
   return (
     <div className="card-container">
       <Link to={`/detail/${id}`}>

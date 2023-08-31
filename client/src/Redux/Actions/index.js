@@ -6,6 +6,8 @@ import {
   GET_ALL_TEMPERAMENTS,
   GET_DOG_BY_ID,
   CLEAN_STATE,
+  GET_DOG_BY_NAME,
+  CLEAN_STATE_NAME,
 } from "../ActionTypes/index";
 import addImg from "./dogs.jpg";
 
@@ -98,6 +100,32 @@ export function cleanState() {
   return function (dispatch) {
     return dispatch({
       type: CLEAN_STATE,
+    });
+  };
+}
+
+export function getDogByName(searchBar) {
+  return async function (dispatch) {
+    try {
+      const result = (
+        await axios.get(`http://localhost:3001/dogs/?name=${searchBar}`)
+      ).data;
+      console.log(result);
+      return dispatch({
+        type: GET_DOG_BY_NAME,
+        payload: result,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+      alert(error.response.data.error);
+    }
+  };
+}
+
+export function cleanStateName() {
+  return function (dispatch) {
+    return dispatch({
+      type: CLEAN_STATE_NAME,
     });
   };
 }

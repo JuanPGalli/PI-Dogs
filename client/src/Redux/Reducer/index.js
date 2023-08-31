@@ -5,6 +5,8 @@ import {
   FILTER_TEMP,
   GET_DOG_BY_ID,
   CLEAN_STATE,
+  GET_DOG_BY_NAME,
+  CLEAN_STATE_NAME,
 } from "../ActionTypes";
 
 let initialState = {
@@ -13,6 +15,7 @@ let initialState = {
   dogsFiltered: [],
   filters: false,
   dogById: {},
+  dogByName: [],
 };
 
 function rootReducer(state = initialState, action) {
@@ -133,6 +136,18 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         dogById: {},
+      };
+
+    case GET_DOG_BY_NAME:
+      return {
+        ...state,
+        dogByName: action.payload,
+      };
+    case CLEAN_STATE_NAME:
+      console.log("Received results: Cleaning State");
+      return {
+        ...state,
+        dogByName: [],
       };
 
     default:
